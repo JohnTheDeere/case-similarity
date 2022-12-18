@@ -1,0 +1,45 @@
+stages:
+
+  create_data:
+    cmd: python -m src.create_data.create_data --config='params.yaml'
+    deps:
+      - src/create_data/create_data.py
+    params:
+      - create_data.N
+    outs:
+      - data/raw/data.xlsx
+
+  preprocess:
+    cmd: python -m src.preprocess.preprocess --config='params.yaml'
+    deps:
+      - src/preprocess/preprocess.py
+      - data/raw/data.xlsx 
+    params:
+      - preprocess.test_size
+      - preprocess.random_state
+      - preprocess.batch_size
+      - preprocess.pretrained_tokenizer
+    outs:
+      - data/processed/dataset.pt 
+  
+  train:
+    cmd: python -m src.train.train --config='params.yaml'
+    deps:
+      - src/train/train.py
+      - data/processed/dataset.pt  
+    params:
+      - train.pretrained_model
+      - train.learning_rate
+      - train.epochs
+      - train.temperature
+    outs:
+      - models/model.pt
+    metrics:
+      - dvclive/metrics.json:
+          cache: false
+    plots:
+      - dvclive/plots:
+          cache: false
+  
+
+  

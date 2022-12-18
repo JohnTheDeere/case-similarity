@@ -1,0 +1,14 @@
+create_data:
+  N: 20000
+
+preprocess:
+  test_size: 0.1
+  random_state: 69420
+  batch_size: 6
+  pretrained_tokenizer: sentence-transformers/all-mpnet-base-v2
+
+train:
+  pretrained_model: sentence-transformers/all-mpnet-base-v2
+  learning_rate: 0.00001
+  epochs: 2
+  temperature: 0.05
